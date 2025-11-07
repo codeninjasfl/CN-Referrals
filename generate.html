@@ -7,17 +7,15 @@
   <title>Code Ninjas - Share Your Story For $100 Off</title>
   <meta name="description" content="Generate a social-ready post about your child’s Code Ninjas experience — and share a QR that links to your dojo’s signup page. Every referral equals $100 off your next month (stackable up to your dojo’s limit)." />
   <style>
-    :root{
     :root {
       --bg1:#0ea5e9;
       --bg2:#2563eb;
       --card:#ffffff;
-@@ -16,18 +16,25 @@
+      --ink:#0f172a;
+      --muted:#64748b;
       --brand:#2563eb;
       --accent:#22d3ee;
       --border:#e5e7eb;
-      --radius:18px;
-      --shadow:0 14px 34px rgba(2,6,23,.18), 0 2px 10px rgba(2,6,23,.08);
       --radius:16px;
       --radius-xl:22px;
       --shadow:0 12px 30px rgba(2,6,23,.18), 0 2px 8px rgba(2,6,23,.08);
@@ -28,12 +26,8 @@
 
     *{box-sizing:border-box}
 
-    html,body{
     html, body {
       margin:0;
-      height:100%;
-      background:linear-gradient(180deg,var(--bg1),var(--bg2));
-      font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans;
       min-height:100%;
       font-family:var(--font-sans);
       color:var(--ink);
@@ -44,26 +38,36 @@
     }
 
     /* Top-right nav shared with Home */
-@@ -58,35 +65,39 @@
+    .top-nav{
+      position:fixed;
+      top:14px;
+      right:18px;
+      display:flex;
+      align-items:center;
+      gap:14px;
+      font-size:14px;
+      font-weight:700;
+      color:#e5e7eb;
+      z-index:60;
+    }
+    .top-nav a{
+      color:#bfdbfe;
+      text-decoration:none;
+      transition:opacity .18s ease-out, transform .18s ease-out;
+    }
+    .top-nav a:hover{
+      opacity:.9;
+      transform:translateY(-1px);
+    }
+    .top-nav a.active{
+      color:#ffffff;
+    }
     .top-nav span{
       opacity:.4;
     }
-    @media(max-width:768px){
-      .top-nav{
-        position:static;
-        justify-content:center;
-        margin:6px auto 0;
-        font-size:11px;
-        font-weight:600;
-      }
     @media (max-width:768px) {$1
     }
 
-    .wrap{
-      min-height:100%;
-      display:grid;
-      place-items:start center;
-      padding:54px 20px 20px;
     .page-wrap {
       min-height:100svh;
       display:flex;
@@ -81,47 +85,259 @@
       gap:14px;
       align-items:stretch;
     }
-    header{color:#eef6ff;text-align:center;margin-bottom:12px}
     header{color:#eef6ff;text-align:center;margin:18px auto 8px;width:min(640px,100%);}
     header .brand{display:flex;align-items:center;justify-content:center;gap:10px}
     header img.logo{height:42px;width:auto;filter:drop-shadow(0 1px 0 rgba(0,0,0,.15))}
     header h1{margin:6px 0 0;font-size:clamp(22px,4vw,34px)}
     header p{margin:6px 0 0;color:#dbeafe}
 
-    .card{
-      width:min(920px,96vw);
     .card {
       width:100%;
       background:var(--card);
       border:1px solid var(--border);
-      border-radius:var(--radius);
       border-radius:var(--radius-xl);
       box-shadow:var(--shadow);
-      padding:22px;
       padding:18px 18px 20px;
     }
     .hint{color:var(--muted);font-size:12px;margin:0 0 10px}
     label{font-weight:700;display:block;margin:0 0 6px}
-@@ -213,7 +224,7 @@
+    input,select,textarea{
+      width:100%;
+      padding:12px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      font-size:16px;
+    }
+    textarea{min-height:160px;resize:vertical;background:#f8fafc}
+    .actions{
+      display:flex;
+      gap:10px;
+      justify-content:flex-end;
+      margin-top:14px;
+      flex-wrap:wrap;
+    }
+    .btn{
+      appearance:none;
+      border:1px solid var(--border);
+      background:#f8fafc;
+      border-radius:12px;
+      padding:12px 16px;
+      cursor:pointer;
+      font-weight:800;
+      min-height:48px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+    .btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+    .btn.ghost{background:#fff}
+    .btn.icon{padding:12px;width:44px;justify-content:center}
+    .btn.icon svg{width:18px;height:18px;display:block}
+    .btn:focus-visible{outline:3px solid color-mix(in oklab,var(--brand) 65%, white)}
+    .btn:disabled{opacity:.55;cursor:not-allowed}
+
+    .hidden{display:none !important}
+    .fade{animation:fade .25s ease}
+    @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+    @media (prefers-reduced-motion:reduce){.fade{animation:none}}
+
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:16px;
+      transform:translateX(-50%);
+      background:#111827;
+      color:#fff;
+      padding:10px 14px;
+      border-radius:10px;
+      box-shadow:var(--shadow);
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .25s ease;
+      font-size:13px;
+      z-index:80;
+    }
+    .toast.show{opacity:1}
+
+    .wizard-head{display:flex;align-items:center;gap:12px;margin:8px 0 12px}
+    .progress{position:relative;height:8px;background:#eef2ff;border-radius:999px;overflow:hidden;flex:1}
+    .progress .bar{position:absolute;inset:0 100% 0 0;background:linear-gradient(90deg,var(--accent),var(--brand));transition:inset .25s ease}
+    .step{display:none}
+    .step.active{display:block}
+
+    .final{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
+    .final .panel{border:1px solid var(--border);border-radius:14px;padding:16px}
+    .final h3{margin:0 0 8px}
+    .caption-area{display:flex;flex-direction:column;gap:10px}
+    .cta-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .mini{font-size:12px;color:#64748b}
+
+    .chips{display:flex;gap:10px;flex-wrap:wrap}
+    .chip{
+      appearance:none;
+      border:1px solid var(--border);
+      background:#fff;
+      border-radius:999px;
+      padding:8px 13px;
+      font-weight:700;
+      cursor:pointer;
+      font-size:13px;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+    }
+    .chip[aria-pressed="true"]{background:color-mix(in oklab,var(--brand) 18%, white);border-color:var(--brand);color:#111827}
+    .chip:focus-visible{outline:3px solid color-mix(in oklab,var(--brand) 55%, white)}
+
+    .vibe-row{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+    .vibe-row .label{font-weight:600}
+    .vibe-toggles{display:flex;gap:6px;flex-wrap:wrap}
+    .chip-vibe{font-size:11px;padding:6px 11px}
+
+    .qr-wrap{display:grid;gap:10px;justify-items:center}
+    .qr-card{border:1px dashed var(--border);border-radius:12px;padding:10px;background:#fff;box-shadow:var(--shadow)}
+    .qr-card canvas{display:block;width:min(320px,88vw);height:auto;border-radius:8px}
+    .qr-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center}
+
+    .social-row{display:flex;gap:8px;margin-top:4px;flex-wrap:wrap;align-items:center}
+    .social-label{font-size:11px;color:#64748b}
+    .social-btn{
+      padding:6px 10px;
+      min-height:auto;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:700;
+      background:#f9fafb;
+    }
+    .social-btn span.icon{
+      width:14px;height:14px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;
+    }
+
+    @media (max-width:880px){.final{grid-template-columns:1fr}}
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+  <nav aria-label="Primary" class="top-nav">
+    <a href="./">Home</a>
+    <span>|</span>
     <a href="./generate.html" class="active">Generate</a>
   </nav>
 
-  <div class="wrap">
   <div class="page-wrap">
     <header>
       <div class="brand">
         <img class="logo" src="https://www.codeninjas.com/hubfs/Group%201.svg" alt="Code Ninjas logo" onerror="this.style.display='none'">
-@@ -222,7 +233,8 @@
+      </div>
+      <h1>Code Ninjas - Share Your Story For $100 Off</h1>
       <p class="sub">Generate a quick post about your child’s Code Ninjas experience. Every friend who enrolls with your referral is <strong>$100 off</strong> your next month.</p>
     </header>
 
-    <section class="card fade" aria-label="Referral social generator">
     <main class="layout">
       <section class="card fade" aria-label="Referral social generator">
       <div class="wizard-head">
         <div id="stepLabel" class="mini">Step 1 of 7</div>
         <div class="progress"><div id="progressBar" class="bar"></div></div>
-@@ -329,447 +341,448 @@
+      </div>
+
+      <!-- Step 1: Dojo -->
+      <div class="step active" data-step="0">
+        <label for="dojo">Which Code Ninjas dojo do you attend?</label>
+        <select id="dojo" required>
+          <option value="" disabled selected>Select your dojo…</option>
+          <option value="Aventura">Code Ninjas Aventura</option>
+          <option value="Cooper City">Code Ninjas Cooper City</option>
+          <option value="Weston">Code Ninjas Weston</option>
+        </select>
+        <p class="hint">We’ll use this to add the right link and name in your post + QR.</p>
+      </div>
+
+      <!-- Step 2: Child name -->
+      <div class="step" data-step="1">
+        <label for="childName">Your child’s first name</label>
+        <input id="childName" type="text" placeholder="e.g., Mason" required />
+        <p class="hint">We’ll personalize the message using their name only.</p>
+      </div>
+
+      <!-- Step 3: Gender -->
+      <div class="step" data-step="2">
+        <label for="gender">Your child’s gender</label>
+        <select id="gender" required>
+          <option value="" disabled selected>Select one…</option>
+          <option value="boy">Boy</option>
+          <option value="girl">Girl</option>
+          <option value="other">Other / Prefer not to say</option>
+        </select>
+      </div>
+
+      <!-- Step 4: Program -->
+      <div class="step" data-step="3">
+        <label for="program">Program they attend</label>
+        <select id="program" required>
+          <option value="" disabled selected>Select a program…</option>
+          <option value="JR">JR (Ages 5–7)</option>
+          <option value="CREATE">CREATE (8+)</option>
+          <option value="Robotics Academy">Robotics Academy</option>
+          <option value="AI Academy">AI Academy</option>
+          <option value="Clubs">Clubs</option>
+        </select>
+      </div>
+
+      <!-- Step 5: Likes (multi-select chips) -->
+      <div class="step" data-step="4">
+        <label>As a parent, what do you like about Code Ninjas? <span class="mini">(choose all that apply)</span></label>
+        <div id="likesChips" class="chips" role="group" aria-label="What you like"></div>
+      </div>
+
+      <!-- Step 6: Vibe -->
+      <div class="step" data-step="5">
+        <div class="vibe-row">
+          <div class="label">Pick your vibe:</div>
+          <div class="vibe-toggles">
+            <button class="chip chip-vibe" type="button" data-vibe="warm">Warm + grateful</button>
+            <button class="chip chip-vibe" type="button" data-vibe="hype">High-energy</button>
+            <button class="chip chip-vibe" type="button" data-vibe="simple">Short &amp; simple</button>
+          </div>
+        </div>
+        <p class="hint">We’ll match the caption style to how you like to share.</p>
+      </div>
+
+      <!-- Step 7: Preview & QR -->
+      <div class="step" data-step="6">
+        <div class="final">
+          <div class="panel caption-area">
+            <h3>Your shareable caption</h3>
+            <textarea id="captionOutput" readonly></textarea>
+            <div class="cta-row">
+              <button id="copyCaption" class="btn primary" type="button">Copy caption</button>
+              <button id="regenCaption" class="btn ghost" type="button">Try another version</button>
+            </div>
+            <div class="social-row">
+              <span class="social-label">Suggested for:</span>
+              <button class="btn social-btn" type="button" disabled><span class="icon">📱</span>Instagram story</button>
+              <button class="btn social-btn" type="button" disabled><span class="icon">👍</span>Facebook post</button>
+              <button class="btn social-btn" type="button" disabled><span class="icon">💬</span>WhatsApp message</button>
+            </div>
+            <p class="mini">Tip: Paste the caption, tag your dojo, and share your unique experience. When friends enroll from your share, you earn $100 off (per dojo rules).</p>
+          </div>
+
+          <div class="panel">
+            <h3>Your referral QR</h3>
+            <div class="qr-wrap">
+              <div class="qr-card">
+                <canvas id="qrCanvas" width="1024" height="1024" aria-label="QR linking to your dojo booking page"></canvas>
+              </div>
+              <div class="qr-actions">
+                <button id="downloadQR" class="btn" type="button" disabled>Download QR (PNG)</button>
+              </div>
+              <p id="qrStatus" class="mini" aria-live="polite">Scan to book a free gamebuilding session at your dojo.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions" id="navActions">
+        <button id="back" class="btn" type="button" disabled>◀ Back</button>
         <button id="next" class="btn primary" type="button">Next ▶</button>
       </div>
     </section>
